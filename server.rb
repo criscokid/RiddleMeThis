@@ -1,6 +1,7 @@
 EARTH_RADIUS = 3959.0
 
 class AITPContest < Sinatra::Base
+  register Sinatra::Contrib
 
   before do
     if !params[:auth_key] || !AuthKey.first(key: params[:auth_key])
@@ -25,7 +26,16 @@ class AITPContest < Sinatra::Base
 
     riddle = Riddle.new(riddle: riddle, location:[longitude.to_f, latitude.to_f], 
       auth_key: auth_key, username: username)
-    halt 500, riddle.errors.to_json if !riddle.save
+
+    respond_to do |f|
+      if riddle.save
+        f.json{ riddle.to_json }
+        f.xml { riddle.to_xml }
+      else
+        f.json { halt 500, riddle.errors.to_json }
+        f.xml { halt 500, riddle.errors.to_xml }
+      end
+    end
   end
 
   post '/answer' do
@@ -36,15 +46,20 @@ class AITPContest < Sinatra::Base
     username = params[:username]
 
     riddle = Riddle.check_answer(latitude, longitude, riddle_id)
-    if riddle
-      ans = Answer.new(auth_key: auth_key, username: username, location:[longitude, latitude])
-      if ans.save
-        { success: true }.to_json
+
+    respond_to do |f|
+      if riddle
+        ans = Answer.new(auth_key: auth_key, username: username, location:[longitude, latitude])
+        if ans.save
+          f.json{ ans.to_json }
+          f.xml { ans.to_xml }
+        else
+          f.json{ ans.errors.to_json }
+          f.xml { ans.errors.to_xml }
+        end
       else
-        halt 500, ans.errors.to_json
+        halt 404
       end
-    else
-      { success: false }.to_json
     end
   end
 
@@ -53,7 +68,10 @@ class AITPContest < Sinatra::Base
     longitude = params[:longitude].to_f
     auth_key = params[:auth_key]
     
-    Riddle.find_all_local(latitude, longitude, auth_key).to_json({only: [:id, :riddle], 
-      methods:[:latitude, :longitude]})
+    riddles = Riddle.find_all_local(latitude, longitude, auth_key).to_a
+    respond_to do |f|
+      f.json { riddles.to_json({only: [:id, :riddle], methods:[:latitude, :longitude]}) }
+      f.xml { riddles.to_xml({only: [:id, :riddle], methods:[:latitude, :longitude]}) }
+    end
   end
 end
