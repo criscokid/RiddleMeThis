@@ -64,6 +64,13 @@ class Answer
   validates_presence_of :auth_key
   validates_presence_of :location
   validates_presence_of :username
+
+  def self.leaders_for_area(lat, long, key)
+    maxDistance = 10.0 / EARTH_RADIUS
+    answers = where(location: { '$nearSphere' => [long, lat], '$maxDistance' => maxDistance}, 
+      auth_key:key)
+    answers.group_by{|a| a.username}.map{|name, points| { "#{name}" => points.size }}.flatten
+  end
 end
 
 class Numeric
