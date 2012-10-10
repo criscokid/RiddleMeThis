@@ -1,149 +1,137 @@
-!!! 5
-%html
-  %head
-    %title Riddle Me There Service
-    %link{"rel" => "stylesheet", "href" => "bootstrap.css", "type" => "text/css"}
-    %link{"rel" => "stylesheet", "href" => "site.css", "type" => "text/css"}   
-    %link{"rel" => "stylesheet", "href" => "prettify.css", "type" => "text/css"}
-    %script{:src => 'prettify.js'}
-    %script{:src => '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'}
+.row
+  .span9
+    %h2 Riddle Me There Service
+.row
+  .span9
+    All request should include your auth key as a parameter. Either in the URL or in the form with the name: 
+    %span.highlight auth_key
+.row
+  .span9
+    %h3 Creating a Riddle
+    %p
+      %h5 Verb
+      %span.highlight POST
+    %p
+      %h5 URL
+      %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/create_riddle"}
+    %p
+      %h5 Accepts Header
+      %span.highlight application/json
+      or
+      %span.highlight application/xml
+    %p
+      %h5 Parameters
+      %dl
+        %dt riddle (string)
+        %dd The text that makes up the riddle.
+        %dt latitude (decimal)
+        %dd A decimal value representing the latitude of the location.
+        %dt longitude (decimal)
+        %dd A decimal value representing the longitude of the location.
+        %dt username (string)
+        %dd The username representing the user.
+    %p
+      %h5 Example Response (applicaiton/json)
+      %pre.prettyprint.lang-js
+        :preserve
+          {
+            "id":"5074c7d399151b0cbe000003",
+            "latitude":30.20827,
+            "longitude":-92.013116,
+            "riddle":"Where is this?"
+          }
+.row
+  .span9
+    %h3 Local Riddles
+    %p
+      Finds all riddles within 10 miles of the user.
+    %p
+      %h5 Verb
+      %span.highlight GET
+    %p
+      %h5 URL
+      %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/local_riddles"}
+    %p
+      %h5 Accepts Header
+      %span.highlight application/json
+      or
+      %span.highlight application/xml
+    %p
+      %h5 Parameters
+      %dl
+        %dt latitude (decimal)
+        %dd A decimal value representing the latitude of the current location.
+        %dt longitude (decimal)
+        %dd A decimal value representing the longitude of the current location.
+    %p
+      %h5 Example Response (applicaiton/json)
+      %pre.prettyprint.lang-js
+        :preserve
+          [
+            {
+              "id":"5070688499151b097a000003",
+              "latitude":30.20827,
+              "longitude":-92.013116,
+              "riddle":"Where is this?"
+            }
+          ]
+.row
+  .span9
+    %h3 Submit Answer
+    %p
+      Returns 404 if the answer is incorrect, otherwise returns a 200.
+    %p
+      %h5 Verb
+      %span.highlight POST
+    %p
+      %h5 URL
+      %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/answer"}
+    %p
+      %h5 Accepts Header
+      %span.highlight application/json
+      or
+      %span.highlight application/xml
+    %p
+      %h5 Parameters
+      %dl
+        %dt riddle_id (string)
+        %dd The id of the riddle the user is attempting to answer.
+        %dt latitude (decimal)
+        %dd A decimal value representing the latitude of the current location.
+        %dt longitude (decimal)
+        %dd A decimal value representing the longitude of the current location.
+        %dt username (string)
+        %dd The username of the user attempting to answer the riddle.
 
-  %body{onload: 'prettyPrint()'}
-    .container
-      .row
-        .span12
-          %h2 Riddle Me There Service
-      .row
-        .span12
-          All request should include your auth key as a parameter. Either in the URL or in the form with the name: 
-          %span.highlight auth_key
-      .row
-        .span12
-          %h3 Creating a Riddle
-          %p
-            %h5 Verb
-            %span.highlight POST
-          %p
-            %h5 URL
-            %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/create_riddle"}
-          %p
-            %h5 Accepts Header
-            %span.highlight application/json
-            or
-            %span.highlight application/xml
-          %p
-            %h5 Parameters
-            %dl
-              %dt riddle (string)
-              %dd The text that makes up the riddle.
-              %dt latitude (decimal)
-              %dd A decimal value representing the latitude of the location.
-              %dt longitude (decimal)
-              %dd A decimal value representing the longitude of the location.
-              %dt username (string)
-              %dd The username representing the user.
-          %p
-            %h5 Example Response (applicaiton/json)
-            %pre.prettyprint.lang-js
-              :preserve
-                {
-                  "id":"5074c7d399151b0cbe000003",
-                  "latitude":30.20827,
-                  "longitude":-92.013116,
-                  "riddle":"Where is this?"
-                }
-      .row
-        .span12
-          %h3 Local Riddles
-          %p
-            Finds all riddles within 10 miles of the user.
-          %p
-            %h5 Verb
-            %span.highlight GET
-          %p
-            %h5 URL
-            %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/local_riddles"}
-          %p
-            %h5 Accepts Header
-            %span.highlight application/json
-            or
-            %span.highlight application/xml
-          %p
-            %h5 Parameters
-            %dl
-              %dt latitude (decimal)
-              %dd A decimal value representing the latitude of the current location.
-              %dt longitude (decimal)
-              %dd A decimal value representing the longitude of the current location.
-          %p
-            %h5 Example Response (applicaiton/json)
-            %pre.prettyprint.lang-js
-              :preserve
-                [
-                  {
-                    "id":"5070688499151b097a000003",
-                    "latitude":30.20827,
-                    "longitude":-92.013116,
-                    "riddle":"Where is this?"
-                  }
-                ]
-      .row
-        .span12
-          %h3 Submit Answer
-          %p
-            Returns 404 if the answer is incorrect, otherwise returns a 200.
-          %p
-            %h5 Verb
-            %span.highlight POST
-          %p
-            %h5 URL
-            %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/answer"}
-          %p
-            %h5 Accepts Header
-            %span.highlight application/json
-            or
-            %span.highlight application/xml
-          %p
-            %h5 Parameters
-            %dl
-              %dt riddle_id (string)
-              %dd The id of the riddle the user is attempting to answer.
-              %dt latitude (decimal)
-              %dd A decimal value representing the latitude of the current location.
-              %dt longitude (decimal)
-              %dd A decimal value representing the longitude of the current location.
-              %dt username (string)
-              %dd The username of the user attempting to answer the riddle.
-
-      .row
-        .span12
-          %h3 Leaderboards
-          %p
-            Returns a list of users and their total correct answers for all answers within 10 miles of the users location.
-          %p
-            %h5 Verb
-            %span.highlight GET
-          %p
-            %h5 URL
-            %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/leaderboards"}
-          %p
-            %h5 Accepts Header
-            %span.highlight application/json
-            or
-            %span.highlight application/xml
-          %p
-            %h5 Parameters
-            %dl
-              %dt latitude (decimal)
-              %dd A decimal value representing the latitude of the current location.
-              %dt longitude (decimal)
-              %dd A decimal value representing the longitude of the current location.
-          %p
-            %h5 Example Response (applicaiton/json)
-            %pre.prettyprint.lang-js
-              :preserve
-                [
-                  {"criscokid":2}
-                ]
+.row
+  .span9
+    %h3 Leaderboards
+    %p
+      Returns a list of users and their total correct answers for all answers within 10 miles of the users location.
+    %p
+      %h5 Verb
+      %span.highlight GET
+    %p
+      %h5 URL
+      %input.span6{type:'text', value: "http://aitp-contest.herokuapp.com/leaderboards"}
+    %p
+      %h5 Accepts Header
+      %span.highlight application/json
+      or
+      %span.highlight application/xml
+    %p
+      %h5 Parameters
+      %dl
+        %dt latitude (decimal)
+        %dd A decimal value representing the latitude of the current location.
+        %dt longitude (decimal)
+        %dd A decimal value representing the longitude of the current location.
+    %p
+      %h5 Example Response (applicaiton/json)
+      %pre.prettyprint.lang-js
+        :preserve
+          [
+            {"criscokid":2}
+          ]
 
 

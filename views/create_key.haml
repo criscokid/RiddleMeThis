@@ -1,0 +1,23 @@
+.row
+  .span12
+    %h1 Create an Authentication Key
+.row
+  .span12
+    %p Use this page to generate an authentication key for your application. Simply provide an email address. In the event the key is lost, simply re-enter the email address and the same key will be retrieved.
+.row
+  .span12
+    %form{:action => '/create_key', method: 'post'}
+      %fieldset
+        %legend Create Key
+        .row
+          .span10
+            %label Email Address
+            %input.span6{name: 'email_address', type: 'text'}
+        .row
+          .span10
+            %input{type:'submit', value:'Create Key', class: 'btn btn-success'}
+
+- if auth_key
+  .row
+    .well
+      = auth_key

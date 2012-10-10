@@ -1,10 +1,11 @@
 EARTH_RADIUS = 3959.0
+require 'securerandom'
 
 class AITPContest < Sinatra::Base
   register Sinatra::Contrib
 
   before do
-    unless request.path_info == '/'
+    unless request.path_info == '/' || request.path_info == '/create_key'
       if !params[:auth_key] || !AuthKey.first(key: params[:auth_key])
         halt 403, 'Invalid auth key.'
       end
@@ -92,6 +93,18 @@ class AITPContest < Sinatra::Base
       f.json { leaders.to_json }
       f.xml { leaders.to_xml }
     end
+  end
+
+  get '/create_key' do
+    haml :create_key, locals: {auth_key: nil}
+  end
+
+  post '/create_key' do
+    auth_key = AuthKey.where(email_address: params[:email_address]).first
+    if !auth_key
+      auth_key = AuthKey.create!(key: SecureRandom.uuid, email_address: params[:email_address])
+    end
+    haml :create_key, locals: {auth_key: auth_key.key}
   end
 end
 

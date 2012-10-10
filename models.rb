@@ -51,6 +51,10 @@ end
 class AuthKey
   include MongoMapper::Document
   key :key, String
+  key :email_address, String
+  validates_presence_of :key
+  validates_presence_of :email_address
+  validates_length_of :email_address, :minimum => 1
 end
 
 class Answer

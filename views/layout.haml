@@ -1,0 +1,26 @@
+!!! 5
+%html
+  %head
+    %title Riddle Me There Service
+    %link{"rel" => "stylesheet", "href" => "bootstrap.css", "type" => "text/css"}
+    %link{"rel" => "stylesheet", "href" => "site.css", "type" => "text/css"}   
+    %link{"rel" => "stylesheet", "href" => "prettify.css", "type" => "text/css"}
+    %script{:src => 'prettify.js'}
+    %script{:src => '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'}
+    %script{:src => 'bootstrap.js'}
+    :javascript
+      $('.affix').affix();
+
+  %body{onload: 'prettyPrint()', style:'margin-top: 40px;'}
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          %a.brand{href:'/'} Riddle Me There
+          %ul.nav
+            %li
+              %a{href:'/'}Home
+            %li
+              %a{href:'/create_key'}Create A Key
+    .container
+      .span12
+      = yield
