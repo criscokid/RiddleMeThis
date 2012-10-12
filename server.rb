@@ -4,8 +4,10 @@ require 'securerandom'
 class AITPContest < Sinatra::Base
   register Sinatra::Contrib
 
+  valid_paths = ['/', '/create_key', '/simulate_location']
+
   before do
-    unless request.path_info == '/' || request.path_info == '/create_key'
+    unless valid_paths.include?(request.path_info)
       if !params[:auth_key] || !AuthKey.first(key: params[:auth_key])
         halt 403, 'Invalid auth key.'
       end
@@ -105,6 +107,10 @@ class AITPContest < Sinatra::Base
       auth_key = AuthKey.create!(key: SecureRandom.uuid, email_address: params[:email_address])
     end
     haml :create_key, locals: {auth_key: auth_key.key}
+  end
+
+  get '/simulate_location' do
+    haml :simulate_location
   end
 end
 
